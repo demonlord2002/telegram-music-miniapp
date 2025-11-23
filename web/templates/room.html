@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Music MiniApp Room</title>
+<link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+<div class="container">
+    <h1>Music Room</h1>
+    <div class="room-info">
+        <p>Room ID: <span id="chat-id"></span></p>
+        <p>Settings: <span id="settings"></span></p>
+    </div>
+    <div class="users">
+        <h2>Joined Users</h2>
+        <ul id="user-list"></ul>
+    </div>
+    <div class="queue">
+        <h2>Queue</h2>
+        <ul id="queue-list"></ul>
+    </div>
+    <div class="player">
+        <audio id="audio-player" controls></audio>
+        <button id="play-next">Next</button>
+    </div>
+</div>
+
+<script src="/static/js/main.js"></script>
+</body>
+</html>

@@ -1,17 +1,95 @@
 body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #0f0f0f;
-  color: white;
+  background: #000;
+  color: #fff;
+  font-family: "Inter", sans-serif;
 }
 
-.room {
-  padding: 20px;
+.loading {
+  padding: 40px;
+  text-align: center;
+  color: #888;
 }
 
-.card {
-  background: #1b1b1b;
-  padding: 20px;
-  margin-bottom: 15px;
+.room-container {
+  padding: 15px;
+}
+
+.player-card {
+  background: #111;
   border-radius: 12px;
+  padding: 15px;
+  display: flex;
+  margin-bottom: 20px;
+  align-items: center;
+}
+
+.player-card.empty {
+  text-align: center;
+  padding: 25px;
+  background: #111;
+  border-radius: 12px;
+}
+
+.player-card .thumb {
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  margin-right: 15px;
+}
+
+.player-card .title {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.player-card .artist {
+  font-size: 14px;
+  opacity: 0.7;
+}
+
+.queue-box,
+.users-box,
+.admin-controls {
+  background: #111;
+  padding: 15px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+.queue-item,
+.user-row,
+.control-row {
+  display: flex;
+  align-items: center;
+  padding: 8px 0;
+}
+
+.index {
+  margin-right: 8px;
+}
+
+.circle {
+  width: 35px;
+  height: 35px;
+  background: #222;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+}
+
+.uname span {
+  color: #1db954;
+  margin-left: 5px;
+}
+
+button {
+  margin-left: auto;
+  background: #1db954;
+  border: none;
+  padding: 5px 15px;
+  border-radius: 8px;
+  color: #000;
+  font-weight: bold;
 }

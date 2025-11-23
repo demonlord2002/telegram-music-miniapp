@@ -1,9 +1,4 @@
 from collections import defaultdict
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-import uvicorn
-from utils.db import DB
-
 
 class DB:
     def __init__(self):
@@ -58,10 +53,6 @@ class DB:
     def leave_room(self, chat_id, user_id):
         if user_id in self.data[chat_id]["joined_users"]:
             del self.data[chat_id]["joined_users"][user_id]
-            
+
 # ---------------------- INIT ----------------------
-try:
-    db = DB()
-except Exception as e:
-    print("DB init failed:", e)
-    raise e
+db = DB()

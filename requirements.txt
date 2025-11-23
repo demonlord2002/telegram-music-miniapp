@@ -1,0 +1,10 @@
+pyrogram==2.0.106
+tgcrypto
+pymongo[srv]==4.6.2
+requests
+flask
+gunicorn
+python-dotenv
+spotipy
+uvicorn
+aiohttp

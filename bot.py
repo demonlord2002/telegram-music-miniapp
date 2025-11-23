@@ -1,10 +1,14 @@
 import os
+import asyncio
 from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from dotenv import load_dotenv
 from utils.db import Database
 from utils.spotify_api import search_spotify_track
 
+# -------------------------------
+# Load environment variables
+# -------------------------------
 load_dotenv()
 
 API_ID = int(os.getenv("API_ID"))
@@ -22,7 +26,7 @@ bot = Client(
 )
 
 # -------------------------------
-# /start
+# /start command
 # -------------------------------
 @bot.on_message(filters.command("start"))
 async def start(_, message):
@@ -34,7 +38,7 @@ async def start(_, message):
     )
 
 # -------------------------------
-# /play
+# /play command
 # -------------------------------
 @bot.on_message(filters.command("play") & filters.group)
 async def play_handler(_, message):
@@ -64,14 +68,13 @@ async def play_handler(_, message):
     )
 
 # -------------------------------
-# /settings
+# /settings command
 # -------------------------------
 @bot.on_message(filters.command("settings") & filters.group)
 async def settings(_, message):
+    owner_status = (await bot.get_chat_member(message.chat.id, message.from_user.id)).status
 
-    owner = (await bot.get_chat_member(message.chat.id, message.from_user.id)).status
-
-    if owner not in ["administrator", "creator"]:
+    if owner_status not in ["administrator", "creator"]:
         return await message.reply("❗ Only admins can open settings.")
 
     settings = db.get_settings(message.chat.id)
@@ -89,9 +92,15 @@ async def settings(_, message):
 
     await message.reply("⚙️ *Who can use skip/pause/resume/end?*", reply_markup=keyboard)
 
+# -------------------------------
+# Start bot with persistent worker
+# -------------------------------
+async def main():
+    await bot.start()
+    print("Bot running…")
+    await bot.idle()  # keeps bot alive on Heroku
+    await bot.stop()
 
-# -------------------------------
-# Start bot
-# -------------------------------
-print("Bot started!")
-bot.run()
+if __name__ == "__main__":
+    print("Starting Bot…")
+    asyncio.run(main())

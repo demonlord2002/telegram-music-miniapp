@@ -1,0 +1,8 @@
+{
+  "name": "telegram-music-miniapp",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "cd miniapp && npm install && npm run build",
+    "start": "echo 'Frontend is static build only'"
+  }
+}

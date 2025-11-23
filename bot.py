@@ -1,14 +1,10 @@
 import os
-import asyncio
 from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from dotenv import load_dotenv
 from utils.db import Database
 from utils.spotify_api import search_spotify_track
 
-# -------------------------------
-# Load environment variables
-# -------------------------------
 load_dotenv()
 
 API_ID = int(os.getenv("API_ID"))
@@ -26,7 +22,7 @@ bot = Client(
 )
 
 # -------------------------------
-# /start command
+# /start
 # -------------------------------
 @bot.on_message(filters.command("start"))
 async def start(_, message):
@@ -38,7 +34,7 @@ async def start(_, message):
     )
 
 # -------------------------------
-# /play command
+# /play
 # -------------------------------
 @bot.on_message(filters.command("play") & filters.group)
 async def play_handler(_, message):
@@ -68,7 +64,7 @@ async def play_handler(_, message):
     )
 
 # -------------------------------
-# /settings command
+# /settings
 # -------------------------------
 @bot.on_message(filters.command("settings") & filters.group)
 async def settings(_, message):
@@ -93,14 +89,7 @@ async def settings(_, message):
     await message.reply("⚙️ *Who can use skip/pause/resume/end?*", reply_markup=keyboard)
 
 # -------------------------------
-# Start bot with persistent worker
+# Start bot
 # -------------------------------
-async def main():
-    await bot.start()
-    print("Bot running…")
-    await bot.idle()  # keeps bot alive on Heroku
-    await bot.stop()
-
-if __name__ == "__main__":
-    print("Starting Bot…")
-    asyncio.run(main())
+print("Bot started!")
+bot.run()  # Pyrogram v2 handles the loop internally

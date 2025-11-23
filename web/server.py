@@ -1,73 +1,60 @@
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+import uvicorn
 import os
-from flask import Flask, send_from_directory, jsonify, request
-from utils.db import Database
-from flask_cors import CORS
+from utils.db import DB
 
-# Paths
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-BUILD_DIR = os.path.join(BASE_DIR, "build")  # web/build
+db = DB()
 
-app = Flask(__name__, static_folder=BUILD_DIR, static_url_path="/")
-CORS(app)
+app = FastAPI()
 
-db = Database()
-
-# ------------------------------
-# Mini App API — Get room data
-# ------------------------------
-@app.route("/api/room/<chat_id>")
-def room_data(chat_id):
-    chat_id = int(chat_id)
-    now_playing = db.get_now_playing(chat_id)
-    queue = db.get_queue(chat_id)
-    users = db.get_joined_users(chat_id)
-
-    return jsonify({
-        "now_playing": now_playing,
-        "queue": queue,
-        "joined_users": users
-    })
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"]
+)
 
 
-# ------------------------------
-# Mini App — User Join Room
-# ------------------------------
-@app.route("/api/join/<chat_id>", methods=["POST"])
-def join_room(chat_id):
-    chat_id = int(chat_id)
-    payload = request.json
-
-    user = {
-        "id": payload.get("id"),
-        "name": payload.get("name"),
-        "username": payload.get("username"),
-        "photo": payload.get("photo")
+@app.get("/api/room")
+def get_room(chat_id: int):
+    """
+    MiniApp fetches room info (queue + users)
+    """
+    return {
+        "queue": db.get_queue(chat_id),
+        "users": db.get_joined_users(chat_id),
+        "settings": db.get_settings(chat_id)
     }
 
-    db.user_join(chat_id, user)
-    return jsonify({"status": "joined"})
+
+@app.get("/api/join")
+def join_room(chat_id: int, user_id: int, name: str, username: str = None):
+    """
+    User joins MiniApp room
+    """
+    db.join_room(chat_id, user_id, name, username)
+    return {"status": "joined"}
 
 
-# ------------------------------
-# Serve React Build
-# ------------------------------
-@app.route("/room/<chat_id>")
-def room_page(chat_id):
-    return send_from_directory(BUILD_DIR, "index.html")
+@app.get("/api/leave")
+def leave_room(chat_id: int, user_id: int):
+    """
+    User leaves room
+    """
+    db.leave_room(chat_id, user_id)
+    return {"status": "left"}
 
 
-@app.route("/", defaults={"path": ""})
-@app.route("/<path:path>")
-def serve(path):
-    file_path = os.path.join(BUILD_DIR, path)
-    if path != "" and os.path.exists(file_path):
-        return send_from_directory(BUILD_DIR, path)
-    return send_from_directory(BUILD_DIR, "index.html")
+@app.get("/")
+def home():
+    return {"status": "OK", "message": "Music MiniApp Backend Running"}
 
 
-# ------------------------------
-# Gunicorn Entry
-# ------------------------------
 if __name__ == "__main__":
-    print(f"Serving from {BUILD_DIR}")
-    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
+    uvicorn.run(
+        "web.server:app",
+        host="0.0.0.0",
+        port=int(os.getenv("PORT", 8000)),
+        reload=False
+    )

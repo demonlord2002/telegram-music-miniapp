@@ -1,0 +1,17 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #0f0f0f;
+  color: white;
+}
+
+.room {
+  padding: 20px;
+}
+
+.card {
+  background: #1b1b1b;
+  padding: 20px;
+  margin-bottom: 15px;
+  border-radius: 12px;
+}

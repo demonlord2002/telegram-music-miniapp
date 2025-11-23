@@ -8,3 +8,5 @@ python-dotenv
 spotipy
 uvicorn
 aiohttp
+flask-cors
+

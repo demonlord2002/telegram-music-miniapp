@@ -58,3 +58,10 @@ class DB:
     def leave_room(self, chat_id, user_id):
         if user_id in self.data[chat_id]["joined_users"]:
             del self.data[chat_id]["joined_users"][user_id]
+            
+# ---------------------- INIT ----------------------
+try:
+    db = DB()
+except Exception as e:
+    print("DB init failed:", e)
+    raise e

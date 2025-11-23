@@ -1,7 +1,42 @@
+
+---
+
+# ✅ `.gitignore`
+
+Clean and correct for Python + React MiniApp + Heroku:
+
+```gitignore
+# Python cache
 __pycache__/
 *.pyc
-.env
-.env.*
-node_modules/
-build/
+*.pyo
+
+# Virtual env
+venv/
+env/
+
+# Node modules (miniapp)
+miniapp/node_modules/
 miniapp/build/
+miniapp/.cache/
+
+# Core build outputs
+web/build/
+static/
+
+# Secrets
+.env
+*.env
+.env.*
+!.env.example
+
+# Logs
+logs/
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Heroku
+*.sqlite3
